@@ -1,4 +1,4 @@
-var sheetsUrlPolygons = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1mbr5C2zf4xzQ7kjS8YasY7sFkzmm5AMurZKKt3rAQHFNQ1PLRXCf867gBnFztD-ipkpj28SiaDdQ/pub?output=csv";
+var sheetsUrlPolygons = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1mbr5C2zf4xzQ7kjS8YasY7sFkzmm5AMurZKKt3rAQHFNQ1PLRXCf867gBnFztD-ipkpj28SiaDdQ/pub?gid=0&single=true&output=csv";
 
 function addPolygons(data) {
 	
@@ -9,7 +9,7 @@ function addPolygons(data) {
 		"features": []
 	}
 
-	var polygonss = {
+	var polygonsStyle = {
 		"color": "#1f140f",
 		"weight": 2,
 		"opacity": 0.4,
@@ -18,7 +18,7 @@ function addPolygons(data) {
 		"pane": "PolygonsPane"
 	}
 
-	var polygonsecologico = {
+	var polygonsEcologicoStyle = {
 		"color": "#1f140f",
 		"weight": 2,
 		"opacity": 0.4,
@@ -50,8 +50,8 @@ function addPolygons(data) {
 
 		style: function (Feature) {
 			switch (Feature.properties.Subcategoria) {
-				case "Natural": return polygonss;
-				case "Ecológico": return polygonsecologico;
+				case "Natural": return polygonsStyle;
+				case "Ecológico": return polygonsEcologicoStyle;
 			}
 		},
 
@@ -66,6 +66,12 @@ function addPolygons(data) {
 					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "</li>" + "</ul>")
 				}
 			};
+
+			
+			switch (Feature.properties.Subcategoria) {
+				case "Natural": return polygroup.addLayer(layer);
+				case "Ecológico": return polygonsEcologicoGroup.addLayer(layer);
+			}
 		}
 	});
 }

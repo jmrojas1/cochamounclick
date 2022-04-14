@@ -1,4 +1,4 @@
-var sheetsUrlPoints = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXfUOg9pNPNi2EQiw-iyrLCt8ywM7FhZJaZ3EWpu4rtU4ZmzIajonwZdt-_m1EuLq0d0J0iUIgiuvq/pub?output=csv"
+var sheetsUrlPoints = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTXfUOg9pNPNi2EQiw-iyrLCt8ywM7FhZJaZ3EWpu4rtU4ZmzIajonwZdt-_m1EuLq0d0J0iUIgiuvq/pub?gid=0&single=true&output=csv"
 
 function addPoints(data) {
 

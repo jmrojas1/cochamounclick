@@ -1,4 +1,4 @@
-var sheetsUrlLineas = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLWzuUgy4niR5WlxCO0uEVkTaBNpnxWXCiYZrhho83CxXp9-JTpQI-gWUHgckNr7zuIHTuypdAj6GR/pub?output=csv"
+var sheetsUrlLineas = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQLWzuUgy4niR5WlxCO0uEVkTaBNpnxWXCiYZrhho83CxXp9-JTpQI-gWUHgckNr7zuIHTuypdAj6GR/pub?gid=0&single=true&output=csv"
 
 function addLines(data) {
 

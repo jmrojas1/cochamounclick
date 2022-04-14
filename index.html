@@ -180,13 +180,13 @@
 		<!--Feature groups y Layer control -->
 		
 		<script>
-		var polygonss = new L.featureGroup().addTo(map);
-		var polygonsecologico = new L.featureGroup().addTo(map);
+		var polygroup = new L.featureGroup().addTo(map);
+		var polygonsEcologicoGroup = new L.featureGroup().addTo(map);
 				
 		var groupedOverlays = {
 			"Patrimonio Natural": {
-				"<small>Natural</small>": polygonss,
-				"<small>Natural/Ecológico</small>": polygonsecologico,
+				"<small>Natural</small>": polygroup,
+				"<small>Natural/Ecológico</small>": polygonsEcologicoGroup,
 			},
 		};
 				
