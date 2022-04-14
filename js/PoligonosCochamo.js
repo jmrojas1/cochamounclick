@@ -66,7 +66,12 @@ function addPolygons(data) {
 					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "</li>" + "</ul>")
 				}
 			};
-		}
+
+			switch (Feature.properties.Subcategoria) {
+				case "Natural": return polygonss.addLayer(layer);
+				case "Ecológico": return polygonsecologico.addLayer(layer);
+			};
+		}	
 	});
 }
 
