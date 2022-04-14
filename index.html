@@ -111,8 +111,14 @@
 					
 		var basemaps = [
 					
-		    L.tileLayer(
-				"https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}",
+		    	L.tileLayer(
+				"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+				{attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>",
+				label: "Esri World Topo Map"}
+			),
+			
+			L.tileLayer(
+				"https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}",
 				{attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>', 
 				subdomains: 'abcd',
 				minZoom: 1,
@@ -129,11 +135,6 @@
 				label: "Mapbox Satellite-Streets"}
 			),
 				
-			L.tileLayer(
-				"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-				{attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>",
-				label: "Esri World Topo Map"}
-			),
 		];
 		
 		map.addControl(L.control.basemaps({
