@@ -67,7 +67,6 @@ function addPolygons(data) {
 				}
 			};
 
-			
 			switch (Feature.properties.Subcategoria) {
 				case "Natural": return polygroup.addLayer(layer);
 				case "Ecológico": return polygonsEcologicoGroup.addLayer(layer);
