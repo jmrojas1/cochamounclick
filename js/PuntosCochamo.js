@@ -23,6 +23,7 @@ function addPoints(data) {
 			"Descripcion": data.descripcion,
 			"Significacion": data.significacion,
 			"Referencias": data.referencias,
+			"Registro": data.registro,
 			"Foto": data.foto,
 			"Hipervinculo": data.hipervinculo
 		}
@@ -32,18 +33,36 @@ function addPoints(data) {
 
 		pointToLayer: function (Feature, pointsCoordinates) {
 			switch (Feature.properties.Subcategoria) {
-				case "Natural": return L.circleMarker(pointsCoordinates, {
+				case "Geológico": return L.circleMarker(pointsCoordinates, {
 					color: "#1f140f",
-					weight: 1,
-					radius: 8,
-					fillColor: "#f2f3f7",
+					weight: 2,
+					radius: 6,
+					fillOpacity: 0.9,
+					fillColor: "#ff0000",
 					pane: "PointsPane"
 				});
 				case "Ecológico": return L.circleMarker(pointsCoordinates, {
 					color: "#1f140f",
-					weight: 1,
-					radius: 8,
-					fillColor: "#f06102",
+					weight: 2,
+					radius: 6,
+					fillOpacity: 0.9,
+					fillColor: "#79e83d",
+					pane: "PointsPane"
+				});
+				case "Biológico": return L.circleMarker(pointsCoordinates, {
+					color: "#1f140f",
+					weight: 2,
+					radius: 6,
+					fillOpacity: 0.9,
+					fillColor: "#f3bb3b",
+					pane: "PointsPane"
+				});
+				case "Hidrológico": return L.circleMarker(pointsCoordinates, {
+					color: "#1f140f",
+					weight: 2,
+					radius: 6,
+					fillOpacity: 0.9,
+					fillColor: "#0084a8",
 					pane: "PointsPane"
 				});
 			}
@@ -57,8 +76,15 @@ function addPoints(data) {
 			function openSidebar(e) {
 				sidebar.show();
 				{
-					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "</li>" + "</ul>")
+					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "<li><b>Registro:&nbsp;</b>" + Feature.properties.Registro + "</li>" + "</ul>")
 				}
+			};
+			
+			switch (Feature.properties.Subcategoria) {
+					case "Geológico": return GeologicoGroup.addLayer(layer);
+					case "Ecológico": return EcologicoGroup.addLayer(layer);
+					case "Biológico": return BiologicoGroup.addLayer(layer);
+					case "Hidrológico": return HidrologicoGroup.addLayer(layer);
 			};
 		}
 	});
