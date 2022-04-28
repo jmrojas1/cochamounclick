@@ -19,7 +19,7 @@
 		html, body, #map {
 			height: 100%;
 			width: 100vw;
-			font-family: 'nowregular', NowRegular, sans-serif;
+			font-family: 'JunctionRegular';
 			font-weight: normal; 
 			font-style: normal;
 			font-size: 0.95em;
@@ -64,7 +64,7 @@
 		
 		<!--Estilos CSS (Fuente Now en línea e incrustado, Font Awesome, Leaflet, Leaflet Fullscreen, Leaflet Control Basemaps, Leaflet Awesome Markers, Leaflet Easy Button, Leaflet Sidebar, Leaflet Grouped Layer Control)-->	
 		
-		<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/now" type="text/css"/>
+		<link rel="stylesheet" media="screen" href="https://fontlibrary.org//face/junction" type="text/css"/>
 		
 		<link rel="stylesheet" href="css/fuente.css" type="text/css" charset="utf-8"/>
 		
@@ -107,26 +107,16 @@
 			]}
 		).setView([-41.7200805552871, -72.22137451171874], 10);
 		
-		<!--Basemaps Layer Control (Stamen Watercolor, Mapbox Satellite-streets, Esri World Topo Map)-->
+		<!--Basemaps Layer Control (Esri World Topo Map, Stamen Toner, Mapbox Satellite-streets)-->
 					
 		var basemaps = [
 					
-		    	L.tileLayer(
+		    L.tileLayer(
 				"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
 				{attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>",
 				label: "Esri World Topo Map"}
 			),
-			
-			L.tileLayer(
-				"https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}",
-				{attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>', 
-				subdomains: 'abcd',
-				minZoom: 1,
-				maxZoom: 16,
-				ext: 'jpg', 
-				label: "Stamen Watercolor"}
-			),
-			
+				
 			L.tileLayer(
 				"https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
 				{attribution: "<a href=https://www.mapbox.com/about/maps/>&copy;Mapbox</a>, <a href=https://www.openstreetmap.org/copyright>&copy;OpenStreetMap</a>, <a href=https://www.mapbox.com/map-feedback/>Improve this map</a>, <a href=https://www.digitalglobe.com/>&copy;DigitalGlobe</a>, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>", 
@@ -134,14 +124,22 @@
 				accessToken: "pk.eyJ1Ijoiam1yb2phcyIsImEiOiJjanQ1cnM5OGswNzhnNGFxZjhkZ2d2c2RoIn0.eYoKy2rUlR7RfdcaZi9Zww", 
 				label: "Mapbox Satellite-Streets"}
 			),
-				
+			
+			L.tileLayer(
+				'https://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Autor:<a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>',
+			subdomains: 'abcd',
+			minZoom: 1,
+			maxZoom: 16,
+			ext: 'jpg'}
+			),			
 		];
 		
 		map.addControl(L.control.basemaps({
 			basemaps: basemaps,
 				tileX: 0,  
 				tileY: 1,  
-				tileZ: 1   
+				tileZ: 1,
 		}).setPosition("bottomleft"));
 		</script>
 		
@@ -181,18 +179,22 @@
 		<!--Feature groups y Layer control -->
 		
 		<script>
-		var polygroup = new L.featureGroup().addTo(map);
-		var polygonsEcologicoGroup = new L.featureGroup().addTo(map);
+		var GeologicoGroup = new L.featureGroup().addTo(map);
+		var EcologicoGroup = new L.featureGroup().addTo(map);
+		var BiologicoGroup = new L.featureGroup().addTo(map);
+		var HidrologicoGroup = new L.featureGroup().addTo(map);
 				
 		var groupedOverlays = {
 			"Patrimonio Natural": {
-				"<small>Natural</small>": polygroup,
-				"<small>Natural/Ecológico</small>": polygonsEcologicoGroup,
+				"<small>Geológico</small>": GeologicoGroup,
+				"<small>Ecológico</small>": EcologicoGroup,
+				"<small>Biológico</small>": BiologicoGroup,
+				"<small>Hidrologico</small>": HidrologicoGroup,
 			},
 		};
 				
 		var options = {
-			groupCheckboxes: ["Natural", "Natural/Ecológico"]
+			groupCheckboxes: ["Geológico", "Ecológico", "Biológico", "Hidrológico"]
 		};
 
 		L.control.groupedLayers(null, groupedOverlays, options).addTo(map).setPosition("topright");
@@ -205,12 +207,16 @@
 		
 		function showDisclaimer() {
 			var div = document.getElementById("leyenda")
-			div.innerHTML = '<b>Leyenda</b><br>' +
-				+'<i style="background-color: #f2f3f7">' + 
-				'</i><small>Natural</small><br>' +
-				'<i style="background-color: #50a6b7">' + 
-				'</i><small>Ecológico</small><br>' +
-				'<i style="background-color: #f06102">';
+			div.innerHTML = '<b>Leyenda</b><br>'+
+				'Patrimonio natural:<br>'+
+				'<i style="background-color: #ff0000">'+
+				'</i><small>Geológico</small><br>'+
+				'<i style="background-color: #79e83d">'+
+				'</i><small>Ecológico</small><br>'+
+				'<i style="background-color: #f3bb3b">'+
+				'</i><small>Biológico</small><br>'+
+				'<i style="background-color: #0084a8">'+
+				'</i><small>Hidrológico</small><br>';
 		}
 
 		function hideDisclaimer() {
@@ -220,13 +226,17 @@
 
 		leyenda.onAdd = function(map) {
 			var div = L.DomUtil.create("div", "leyenda"); 
-			div.innerHTML = '<b>Leyenda</b><br>' +
-				+'<i style="background-color: #f2f3f7">' + 
-				'</i><small>Natural</small><br>' +
-				'<i style="background-color: #50a6b7">' + 
-				'</i><small>Ecológico</small><br>' +
-				'<i style="background-color: #f06102">';
-			
+			div.innerHTML = '<b>Leyenda</b><br>'+
+				'Patrimonio natural:<br>'+
+				'<i style="background-color: #ff0000">'+
+				'</i><small>Geológico</small><br>'+
+				'<i style="background-color: #79e83d">'+
+				'</i><small>Ecológico</small><br>'+
+				'<i style="background-color: #f3bb3b">'+
+				'</i><small>Biológico</small><br>'+
+				'<i style="background-color: #0084a8">'+
+				'</i><small>Hidrológico</small><br>';
+					
 			if (L.Browser.touch){
 				div.setAttribute("ontouchstart", "showDisclaimer()");
 			}
