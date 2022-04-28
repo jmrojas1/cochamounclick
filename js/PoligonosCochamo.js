@@ -9,21 +9,39 @@ function addPolygons(data) {
 		"features": []
 	}
 
-	var polygonsStyle = {
+	var PolygonsGeologico = {
 		"color": "#1f140f",
 		"weight": 2,
-		"opacity": 0.4,
-		"fillColor": "#f2f3f7",
-		"fillOpacity": 0.1,
+		"opacity": 1,
+		"fillColor": "#ff0000",
+		"fillOpacity": 0.9,
 		"pane": "PolygonsPane"
 	}
 
-	var polygonsEcologicoStyle = {
+	var PolygonsEcologico = {
 		"color": "#1f140f",
 		"weight": 2,
-		"opacity": 0.4,
-		"fillColor": "#f06102",
-		"fillOpacity": 0.1,
+		"opacity": 1,
+		"fillColor": "#79e83d",
+		"fillOpacity": 0.9,
+		"pane": "PolygonsPane"
+	}
+
+	var PolygonsBiologico = {
+		"color": "#1f140f",
+		"weight": 2,
+		"opacity": 1,
+		"fillColor": "#f3bb3b",
+		"fillOpacity": 0.9,
+		"pane": "PolygonsPane"
+	}
+
+	var PolygonsHidrologico = {
+		"color": "#1f140f",
+		"weight": 2,
+		"opacity": 1,
+		"fillColor": "#0084a8",
+		"fillOpacity": 0.9,
 		"pane": "PolygonsPane"
 	}
 
@@ -41,6 +59,7 @@ function addPolygons(data) {
 			"Descripcion": data.descripcion,
 			"Significacion": data.significacion,
 			"Referencias": data.referencias,
+			"Registro": data.registro,
 			"Foto": data.foto,
 			"Hipervinculo": data.hipervinculo
 		}
@@ -50,8 +69,10 @@ function addPolygons(data) {
 
 		style: function (Feature) {
 			switch (Feature.properties.Subcategoria) {
-				case "Natural": return polygonsStyle;
-				case "Ecológico": return polygonsEcologicoStyle;
+				case "Geológico": return PolygonsGeologico;
+				case "Ecológico": return PolygonsEcologico;
+				case "Biológico": return PolygonsBiologico;
+				case "Hidrológico": return PolygonsHidrologico;
 			}
 		},
 
@@ -63,13 +84,15 @@ function addPolygons(data) {
 			function openSidebar(e) {
 				sidebar.show();
 				{
-					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "</li>" + "</ul>")
+					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "<li><b>Registro:&nbsp;</b>" + Feature.properties.Registro + "</li>" + "</ul>")
 				}
 			};
 
 			switch (Feature.properties.Subcategoria) {
-				case "Natural": return polygroup.addLayer(layer);
-				case "Ecológico": return polygonsEcologicoGroup.addLayer(layer);
+				case "Geológico": return GeologicoGroup.addLayer(layer);
+				case "Ecológico": return EcologicoGroup.addLayer(layer);
+				case "Biológico": return BiologicoGroup.addLayer(layer);
+				case "Hidrológico": return HidrologicoGroup.addLayer(layer);
 			}
 		}
 	});
@@ -85,7 +108,7 @@ function init() {
 			var polygonsData = polygonsResults.data
 			
 			polygonsData.map((data, index) => {
-				data.geometry ? addPolygons(data) : linesData.splice(index, 1)
+				data.geometry ? addPolygons(data) : polygonsData.splice(index, 1)
 			})
 		}
 	})
