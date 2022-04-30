@@ -79,6 +79,7 @@ function addPolygons(data) {
 		onEachFeature: function (Feature, layer) {
 
 			layer.bindPopup("<b>" + Feature.properties.Elemento + "</b>");
+			layer.bindTooltip("<b>" + Feature.properties.Elemento + "</b>", {sticky: true});
 			layer.on({ click: openSidebar });
 
 			function openSidebar(e) {
