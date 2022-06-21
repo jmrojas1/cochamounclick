@@ -6,14 +6,22 @@ function addPolygons(data) {
 
 	const photoList = [data.foto, data.foto2, data.foto3, data.foto4, data.foto5]
 
-	const videoList = [data.video, data.video2, data.video3, data.video4, data.video5]
+	const videoList = [{video: data.video, minVid: data.minVid}, {video: data.video2, minVid: data.minVid2}, {video: data.video3, minVid: data.minVid3}, {video: data.video4, minVid: data.minVid4}, {video: data.video5, minVid: data.minVid5}]
+
+	var filteredVideoList = videoList.map((videoObj) => {
+		if (videoObj.video !== undefined && videoObj.video !== ' ' && videoObj.video !== '') {
+			videoObj.minVid ? videoObj.minVid : videoObj.minVid ='images/ytlogo.png'
+			return videoObj
+		}
+	})
+
+	const videoObjEntries = Object.entries(filteredVideoList)
+	const videoObjNotUndefined = videoObjEntries.filter(([key,val]) => val !== undefined)
+	const videoObjOutput = Object.fromEntries(videoObjNotUndefined)
+	filteredVideoList = Object.values(videoObjOutput)
 
 	const filteredPhotoList = photoList.filter(foto => {
 		return foto
-	})
-
-	const filteredVideoList = videoList.filter(video => {
-		return video
 	})
 
 	// console.log('PHOTO LIST', filteredPhotoList)
@@ -133,7 +141,7 @@ function addPolygons(data) {
 				layer.on({ click: openSidebarWithVideo });
 				function openSidebarWithVideo(e) {
 					var videoContent = ''
-					Feature.properties.Video.forEach(video => { videoContent += '<li class="splide__slide" data-splide-youtube="' + video + '">' + '<img src="images/ytlogo.png">' + '</li>' })
+					Feature.properties.Video.forEach(videoObject => { videoContent += '<li class="splide__slide" data-splide-youtube="' + videoObject.video + '">' + '<img src=' + videoObject.minVid + '>' + '</li>' })
 
 					const polygonVideoContent = '<h3>' +
 						'<a href=' + Feature.properties.Hipervinculo +
