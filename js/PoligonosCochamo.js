@@ -1,8 +1,23 @@
 var sheetsUrlPolygons = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT1mbr5C2zf4xzQ7kjS8YasY7sFkzmm5AMurZKKt3rAQHFNQ1PLRXCf867gBnFztD-ipkpj28SiaDdQ/pub?gid=0&single=true&output=csv";
 
 function addPolygons(data) {
-	
+
 	var polygonCoordinates = JSON.parse(data.geometry);
+
+	const photoList = [data.foto, data.foto2, data.foto3, data.foto4, data.foto5]
+
+	const videoList = [data.video, data.video2, data.video3, data.video4, data.video5]
+
+	const filteredPhotoList = photoList.filter(foto => {
+		return foto
+	})
+
+	const filteredVideoList = videoList.filter(video => {
+		return video
+	})
+
+	// console.log('PHOTO LIST', filteredPhotoList)
+	// console.log('VIDEO LIST', filteredVideoList)
 
 	var polygons = {
 		"type": "FeatureCollection",
@@ -45,7 +60,7 @@ function addPolygons(data) {
 		"pane": "PolygonsPane"
 	}
 
-	polygons.features.push({
+	const featureObject = {
 		"type": "Feature",
 		"geometry": {
 			"type": "MultiPolygon",
@@ -60,10 +75,17 @@ function addPolygons(data) {
 			"Significacion": data.significacion,
 			"Referencias": data.referencias,
 			"Registro": data.registro,
-			"Foto": data.foto,
 			"Hipervinculo": data.hipervinculo
 		}
-	});
+	}
+
+	if (filteredPhotoList.length >= 1) {
+		featureObject.properties["Foto"] = filteredPhotoList
+		polygons.features.push(featureObject);
+	} else {
+		featureObject.properties["Video"] = filteredVideoList
+		polygons.features.push(featureObject);
+	}
 
 	PolygonMarkers = L.geoJSON(polygons, {
 
@@ -79,15 +101,61 @@ function addPolygons(data) {
 		onEachFeature: function (Feature, layer) {
 
 			layer.bindPopup("<b>" + Feature.properties.Elemento + "</b>");
-			layer.bindTooltip("<b>" + Feature.properties.Elemento + "</b>", {sticky: true});
-			layer.on({ click: openSidebar });
+			layer.bindTooltip("<b>" + Feature.properties.Elemento + "</b>", { sticky: true });
 
-			function openSidebar(e) {
-				sidebar.show();
-				{
-					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "<li><b>Registro:&nbsp;</b>" + Feature.properties.Registro + "</li>" + "</ul>")
-				}
-			};
+			if (Feature.properties.Foto) {
+				layer.on({ click: openSidebarWithPhoto });
+				function openSidebarWithPhoto(e) {
+					var photoContent = ''
+					Feature.properties.Foto.forEach(photo => { photoContent += '<li class=splide__slide><img src=' + photo + ' alt=""></li>' })
+
+					const polygonPhotoContent = '<h3>' +
+						'<a href=' + Feature.properties.Hipervinculo +
+						' target=_blank>' + Feature.properties.Elemento +
+						'</a></h3>' + '<section id="image-carousel" class="splide" aria-label="Beautiful Images">' +
+						'<div class="splide__track">' + '<ul class="splide__list">' + photoContent +
+						'</ul>' + '</div>' + '</section>' + '<p>' + Feature.properties.Descripcion +
+						'</p>' + '<ul>' + '<li><b>Ubicaci&oacute;n:&nbsp;</b>' +
+						Feature.properties.Ubicacion + '</li>' +
+						'<li><b>Significaci&oacute;n cultural:&nbsp;</b>' +
+						Feature.properties.Significacion + '</li>' +
+						'<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>' +
+						Feature.properties.Referencias + '<li><b>Registro:&nbsp;</b>' +
+						Feature.properties.Registro + '</li>' + '</ul>'
+
+					sidebar.show();
+					{
+						sidebar.setContent(polygonPhotoContent)
+						new Splide('#image-carousel').mount();
+					}
+				};
+			} else if (Feature.properties.Video) {
+				layer.on({ click: openSidebarWithVideo });
+				function openSidebarWithVideo(e) {
+					var videoContent = ''
+					Feature.properties.Video.forEach(video => { videoContent += '<li class="splide__slide" data-splide-youtube="' + video + '">' + '<img src="images/ytlogo.png">' + '</li>' })
+
+					const polygonVideoContent = '<h3>' +
+						'<a href=' + Feature.properties.Hipervinculo +
+						' target=_blank>' + Feature.properties.Elemento +
+						'</a></h3>' + '<div class="splide">' + '<div class="splide__track">' +
+						'<ul class="splide__list">' + videoContent +
+						'</ul>' + '</div>' + '</div>' + '<p>' + Feature.properties.Descripcion +
+						'</p>' + '<ul>' + '<li><b>Ubicaci&oacute;n:&nbsp;</b>' +
+						Feature.properties.Ubicacion + '</li>' +
+						'<li><b>Significaci&oacute;n cultural:&nbsp;</b>' +
+						Feature.properties.Significacion + '</li>' +
+						'<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>' +
+						Feature.properties.Referencias + '<li><b>Registro:&nbsp;</b>' +
+						Feature.properties.Registro + '</li>' + '</ul>'
+
+					sidebar.show();
+					{
+						sidebar.setContent(polygonVideoContent)
+						new Splide('.splide').mount( window.splide.Extensions );
+					}
+				};
+			}
 
 			switch (Feature.properties.Subcategoria) {
 				case "Geológico": return GeologicoGroup.addLayer(layer);
@@ -107,7 +175,7 @@ function init() {
 		skipEmptyLines: true,
 		complete: function (polygonsResults) {
 			var polygonsData = polygonsResults.data
-			
+
 			polygonsData.map((data, index) => {
 				data.geometry ? addPolygons(data) : polygonsData.splice(index, 1)
 			})

@@ -4,6 +4,18 @@ function addLines(data) {
 
 	var lineCoordinates = JSON.parse(data.geometry);
 
+	const photoList = [data.foto, data.foto2, data.foto3, data.foto4, data.foto5]
+
+	const videoList = [data.video, data.video2, data.video3, data.video4, data.video5]
+
+	const filteredPhotoList = photoList.filter(foto => {
+		return foto
+	})
+
+	const filteredVideoList = videoList.filter(video => {
+		return video
+	})
+
 	var lines = {
 		"type": "FeatureCollection",
 		"features": []
@@ -24,7 +36,7 @@ function addLines(data) {
 		"opacity": 0.9,
 		"pane": "LinesPane"
 	}
-	
+
 	var LinesBiologico = {
 		"color": "#f3bb3b",
 		"dashArray": "10",
@@ -40,7 +52,7 @@ function addLines(data) {
 		"pane": "LinesPane"
 	}
 
-	lines.features.push({
+	const featureObject = {
 		"type": "Feature",
 		"geometry": {
 			"type": "MultiLineString",
@@ -55,10 +67,17 @@ function addLines(data) {
 			"Significacion": data.significacion,
 			"Referencias": data.referencias,
 			"Registro": data.registro,
-			"Foto": data.foto,
 			"Hipervinculo": data.hipervinculo
 		}
-	});
+	}
+
+	if (filteredPhotoList.length >= 1) {
+		featureObject.properties["Foto"] = filteredPhotoList
+		lines.features.push(featureObject);
+	} else {
+		featureObject.properties["Video"] = filteredVideoList
+		lines.features.push(featureObject);
+	}
 
 	LineMarkers = L.geoJSON(lines, {
 
@@ -73,20 +92,69 @@ function addLines(data) {
 
 		onEachFeature: function (Feature, layer) {
 			layer.bindPopup("<b>" + Feature.properties.Elemento + "</b>");
-			layer.bindTooltip("<b>" + Feature.properties.Elemento + "</b>", {sticky: true});
-			layer.on({ click: openSidebar });
-			
-			function openSidebar(e) {
-				sidebar.show();
-				{
-					sidebar.setContent("<h3>" + "<a href=" + Feature.properties.Hipervinculo + " target=_blank>" + Feature.properties.Elemento + "</a></h3>" + "<img src = " + Feature.properties.Foto + " width=100%>" + "<p>" + Feature.properties.Descripcion + "</p>" + "<ul>" + "<li><b>Ubicaci&oacute;n:&nbsp;</b>" + Feature.properties.Ubicacion + "</li>" + "<li><b>Significaci&oacute;n cultural:&nbsp;</b>" + Feature.properties.Significacion + "</li>" + "<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>" + Feature.properties.Referencias + "<li><b>Registro:&nbsp;</b>" + Feature.properties.Registro + "</li>" + "</ul>")
+			layer.bindTooltip("<b>" + Feature.properties.Elemento + "</b>", { sticky: true });
+			if (Feature.properties.Foto) {
+				layer.on({ click: openSidebarWithPhoto });
+				function openSidebarWithPhoto(e) {
+					var photoContent = ''
+					Feature.properties.Foto.forEach(photo => { photoContent += '<li class=splide__slide><img src=' + photo + ' alt=""></li>' })
+
+					const linesPhotoContent = '<h3>' +
+						'<a href=' + Feature.properties.Hipervinculo +
+						' target=_blank>' + Feature.properties.Elemento +
+						'</a></h3>' + '<section id="image-carousel" class="splide" aria-label="Beautiful Images">' +
+						'<div class="splide__track">' + '<ul class="splide__list">' + photoContent +
+						'</ul>' + '</div>' + '</section>' + '<p>' + Feature.properties.Descripcion +
+						'</p>' + '<ul>' + '<li><b>Ubicaci&oacute;n:&nbsp;</b>' +
+						Feature.properties.Ubicacion + '</li>' +
+						'<li><b>Significaci&oacute;n cultural:&nbsp;</b>' +
+						Feature.properties.Significacion + '</li>' +
+						'<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>' +
+						Feature.properties.Referencias +
+						'<li><b>Registro:&nbsp;</b>' + Feature.properties.Registro +
+						'</li>' + '</ul>'
+
+
+					sidebar.show();
+					{
+						sidebar.setContent(linesPhotoContent)
+						new Splide('#image-carousel').mount();
+					}
 				}
-			};
-		switch (Feature.properties.Subcategoria) {
-			case "Geológico": return GeologicoGroup.addLayer(layer);
-			case "Ecológico": return EcologicoGroup.addLayer(layer);
-			case "Biológico": return BiologicoGroup.addLayer(layer);
-			case "Hidrológico": return HidrologicoGroup.addLayer(layer);
+			} else if (Feature.properties.Video) {
+				layer.on({ click: openSidebarWithVideo });
+				function openSidebarWithVideo(e) {
+					var videoContent = ''
+					Feature.properties.Video.forEach(video => { videoContent += '<li class="splide__slide" data-splide-youtube="' + video + '">' + '<img src="images/ytlogo.png">' + '</li>' })
+
+					const linesVideoContent = '<h3>' +
+						'<a href=' + Feature.properties.Hipervinculo +
+						' target=_blank>' + Feature.properties.Elemento +
+						'</a></h3>' + '<div class="splide">' + '<div class="splide__track">' +
+						'<ul class="splide__list">' + videoContent +
+						'</ul>' + '</div>' + '</div>' + '<p>' + Feature.properties.Descripcion +
+						'</p>' + '<ul>' + '<li><b>Ubicaci&oacute;n:&nbsp;</b>' +
+						Feature.properties.Ubicacion + '</li>' +
+						'<li><b>Significaci&oacute;n cultural:&nbsp;</b>' +
+						Feature.properties.Significacion + '</li>' +
+						'<li><b>Referencias Bibliogr&aacute;ficas:&nbsp;</b>' +
+						Feature.properties.Referencias +
+						'<li><b>Registro:&nbsp;</b>' + Feature.properties.Registro +
+						'</li>' + '</ul>'
+
+					sidebar.show();
+					{
+						sidebar.setContent(linesVideoContent)
+						new Splide('.splide').mount(window.splide.Extensions);
+					}
+				};
+			}
+
+			switch (Feature.properties.Subcategoria) {
+				case "Geológico": return GeologicoGroup.addLayer(layer);
+				case "Ecológico": return EcologicoGroup.addLayer(layer);
+				case "Biológico": return BiologicoGroup.addLayer(layer);
+				case "Hidrológico": return HidrologicoGroup.addLayer(layer);
 			}
 		}
 	});
