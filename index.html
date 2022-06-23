@@ -64,6 +64,10 @@
 
 	<script src="js/geolet.js"></script>
 
+	<script src="js/leaflet-providers.js"></script>
+
+	<script src="http://maps.stamen.com/js/tile.stamen.js"></script>
+
 	<script src="js/L.Control.Basemaps-min.js"></script>
 
 	<script src="src/papaparse.min.js" type="text/javascript"></script>
@@ -139,20 +143,16 @@
 		L.geolet({ position: 'topleft', display: 'flex', color: 'red' }).addTo(map);
 
 		// Basemaps Layer Control(Esri World Topo Map, Stamen Toner, Mapbox Satellite - streets)
-		// var tonerLayer = new L.StamenTileLayer("toner", { label: 'Toner' });
-		// var waterColorLayer = new L.StamenTileLayer("watercolor", { label: 'WaterColor' })
-		// var esriWorldTopoLayer = L.tileLayer.provider('Esri.WorldTopoMap', { label: 'Esri World Topo Layer' })
-		// var imageUrl = 'src/colonizacion-exploraciones.png',
-		// 	imageBounds = [[-41.7200805552871, -72.22137451171874], [-41.7200805552871, -72.22137451171874]];
+		var tonerLayer = new L.StamenTileLayer("toner", { label: 'Toner' });
+		var waterColorLayer = new L.StamenTileLayer("watercolor", { label: 'WaterColor' })
+		var esriWorldTopoLayer = L.tileLayer.provider('Esri.WorldTopoMap', { label: 'Esri World Topo Layer' })
+		var imageUrl = 'src/colonizacion-exploraciones.png',
+			imageBounds = [[-41.7200805552871, -72.22137451171874], [-41.7200805552871, -72.22137451171874]];
 
 		var basemaps = [
-			L.tileLayer(
-				"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-				{
-					attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>",
-					label: "Esri World Topo Map"
-				}
-			),
+			esriWorldTopoLayer,
+			waterColorLayer,
+			tonerLayer,
 			L.tileLayer(
 				"https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
 				{
