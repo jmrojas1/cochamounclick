@@ -167,8 +167,12 @@
 
 		var basemaps = [
 			L.tileLayer.provider('Esri.WorldTopoMap', { label: 'Esri World Topo Layer' }),
-			new L.StamenTileLayer("watercolor", { label: 'WaterColor' }),
-			new L.StamenTileLayer("toner", { label: 'Toner' }),
+			L.tileLayer("https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg", {
+				attribution: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA."
+			}),
+			L.tileLayer("https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png", {
+				attribution: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL."
+			}),
 			L.tileLayer(
 				"https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
 				{
