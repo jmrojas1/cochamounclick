@@ -166,21 +166,19 @@
 			imageBounds = [[-41.7200805552871, -72.22137451171874], [-41.7200805552871, -72.22137451171874]];
 
 		var basemaps = [
-			L.tileLayer("https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg", {
-				attribution: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA."
-			}),
-			L.tileLayer("https://stamen-tiles.a.ssl.fastly.net/toner/{z}/{x}/{y}.png", {
-				attribution: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL."
-			}),
+		    L.tileLayer(
+				"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+				{attribution: "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>",
+				label: "Esri World Topo Map"}
+			),
+			
 			L.tileLayer(
 				"https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
-				{
-					attribution: "<a href=https://www.mapbox.com/about/maps/>&copy;Mapbox</a>, <a href=https://www.openstreetmap.org/copyright>&copy;OpenStreetMap</a>, <a href=https://www.mapbox.com/map-feedback/>Improve this map</a>, <a href=https://www.digitalglobe.com/>&copy;DigitalGlobe</a>, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>",
-					id: "satellite-streets-v9",
-					accessToken: "pk.eyJ1Ijoiam1yb2phcyIsImEiOiJjanQ1cnM5OGswNzhnNGFxZjhkZ2d2c2RoIn0.eYoKy2rUlR7RfdcaZi9Zww",
-					label: "Mapbox Satellite-Streets"
-				}
-			)
+				{attribution: "<a href=https://www.mapbox.com/about/maps/>&copy;Mapbox</a>, <a href=https://www.openstreetmap.org/copyright>&copy;OpenStreetMap</a>, <a href=https://www.mapbox.com/map-feedback/>Improve this map</a>, <a href=https://www.digitalglobe.com/>&copy;DigitalGlobe</a>, Autor: <a href=mailto:josemiguel.rojas.geografo@gmail.com>José Miguel Rojas</a>", 
+				id: "satellite-streets-v9", 
+				accessToken: "pk.eyJ1Ijoiam1yb2phcyIsImEiOiJjanQ1cnM5OGswNzhnNGFxZjhkZ2d2c2RoIn0.eYoKy2rUlR7RfdcaZi9Zww", 
+				label: "Mapbox Satellite-Streets"}
+			),
 		];
 
 		map.addControl(L.control.basemaps({
