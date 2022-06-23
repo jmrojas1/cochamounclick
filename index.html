@@ -166,9 +166,9 @@
 			imageBounds = [[-41.7200805552871, -72.22137451171874], [-41.7200805552871, -72.22137451171874]];
 
 		var basemaps = [
-			waterColorLayer,
-			tonerLayer,
-			esriWorldTopoLayer,
+			L.tileLayer.provider('Esri.WorldTopoMap', { label: 'Esri World Topo Layer' }),
+			new L.StamenTileLayer("watercolor", { label: 'WaterColor' }),
+			new L.StamenTileLayer("toner", { label: 'Toner' }),
 			L.tileLayer(
 				"https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
 				{
